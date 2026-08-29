@@ -9,8 +9,7 @@ from telebot import apihelper, types
 proxy_url = "http://proxy.server:3128"
 apihelper.proxy = {"http": proxy_url, "https": proxy_url}
 
-TOKEN = "
-8658262212:AAGVbXDb7fa9G_zg8Of3qvFDA5MDN5hxmnM"
+TOKEN = "8658262212:AAFZ3NjqVQA-stiFrcKw9ZzLAx260cnUVPU"
 ADMIN_ID = 8762194121
 
 bot = telebot.TeleBot(TOKEN)
