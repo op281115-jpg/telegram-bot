@@ -6,6 +6,11 @@ TOKEN = '8658262212:AAGtRZaF0dE4lKyvsIv-eBdSgUgb6xs2xqc'
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
 
+# Telegram Webhook အလိုအလျောက် ချိတ်ဆက်ရန်
+WEBHOOK_URL = "https://telegram-bot-sbc4.onrender.com/webhook"
+bot.remove_webhook()
+bot.set_webhook(url=WEBHOOK_URL)
+
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="my">
@@ -92,3 +97,4 @@ def play_shankoemee():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
+    
