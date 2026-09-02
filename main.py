@@ -172,7 +172,54 @@ def send_welcome(message):
     web_app = telebot.types.WebAppInfo(url="https://sham-game.onrender.com")
     markup.add(telebot.types.InlineKeyboardButton("🃏 ရှမ်းကိုးမား ကစားရန်", web_app=web_app))
     bot.reply_to(message, "မင်္ဂလာပါ! M9 ရှမ်းကိုးမား ဂိမ်းကို စတင်ဆော့ကစားရန် အောက်ပါခလုတ်ကို နှိပ်ပါ။", reply_markup=markup)
+import random
 
+def create_deck():
+    suits = ['♠', '♥', '♦', '♣']
+    values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    deck = [{'suit': suit, 'val': val} for suit in suits for val in values]
+    random.shuffle(deck)
+    return deck
+
+def get_card_value(card):
+    if card['val'] in ['10', 'J', 'Q', 'K']:
+        return 0
+    if card['val'] == 'A':
+        return 1
+    return int(card['val'])
+
+def calculate_score(cards):
+    total = sum(get_card_value(card) for card in cards)
+    score = total % 10
+    is_shan = len(cards) == 3 and score in [8, 9]
+    return score, is_shan
+
+@app.route('/api/shankoemee/play', methods=['POST'])
+def play_shan_koe_mee():
+    deck = create_deck()
+    player_hand = [deck.pop(), deck.pop(), deck.pop()]
+    banker_hand = [deck.pop(), deck.pop(), deck.pop()]
+    
+    p_score, p_shan = calculate_score(player_hand)
+    b_score, b_shan = calculate_score(banker_hand)
+    
+    if p_shan and not b_shan:
+        winner = 'Player Wins (Shan!)'
+    elif not p_shan and b_shan:
+        winner = 'Banker Wins (Shan!)'
+    elif p_score > b_score:
+        winner = 'Player Wins'
+    elif p_score < b_score:
+        winner = 'Banker Wins'
+    else:
+        winner = 'Draw'
+        
+    return jsonify({
+        'player': {'hand': player_hand, 'score': p_score, 'isShan': p_shan},
+        'banker': {'hand': banker_hand, 'score': b_score, 'isShan': b_shan},
+        'winner': winner
+    })
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
     
