@@ -1,4 +1,4 @@
-import os
+ os
 import telebot
 from flask import Flask, render_template_string, request, jsonify
 
@@ -150,7 +150,6 @@ HTML_TEMPLATE = """
             } else {
                 alert("လက်ကျန်ငွေ မလုံလောက်ပါ။");
             }
-        }
     </script>
 </body>
 </html>
@@ -171,11 +170,12 @@ def webhook():
 def send_welcome(message):
     markup = telebot.types.InlineKeyboardMarkup()
     web_app = telebot.types.WebAppInfo(url="https://sham-game.onrender.com")
-    markup.add(telebot.types.InlineKeyboardButton("🃏 ရှမ်းကိုးမား ကစားရန်", web_app=web_app))
-    bot.reply_to(message, "မင်္ဂလာပါ! M9 ရှမ်းကိုးမား ဂိမ်းကို စတင်ဆော့ကစားရန် အောက်ပါခလုတ်ကို နှိပ်ပါ။", reply_markup=markup)
+    markup.add(telebot.types.InlineKeyboardButton("🃏 ရှမ်းကိုးမီး & ငါးပစ်ဂိမ်း", web_app=web_app))
+    bot.reply_to(message, "မင်္ဂလာပါ! M9 ရှမ်းကိုးမီး ဂိမ်းကို စတင်ဆော့ကစားနိုင်ပါပြီ။", reply_markup=markup)
+
 import random
 
-def create_deck():
+    def create_deck():
     suits = ['♠', '♥', '♦', '♣']
     values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     deck = [{'suit': suit, 'val': val} for suit in suits for val in values]
