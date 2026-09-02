@@ -219,6 +219,37 @@ def play_shan_koe_mee():
         'banker': {'hand': banker_hand, 'score': b_score, 'isShan': b_shan},
         'winner': winner
     })
+    # ငါးပစ်ဂိမ်း (Fish Shooting) လော့ဂျစ်
+FISH_TYPES = [
+    {'name': 'Small Fish', 'multiplier': 2, 'catch_rate': 0.7},
+    {'name': 'Medium Fish', 'multiplier': 5, 'catch_rate': 0.4},
+    {'name': 'Big Fish', 'multiplier': 10, 'catch_rate': 0.2},
+    {'name': 'Boss Fish', 'multiplier': 25, 'catch_rate': 0.08}
+]
+
+@app.route('/api/fishshooting/shoot', methods=['POST'])
+def shoot_fish():
+    data = request.get_json() or {}
+    bullet_cost = data.get('bullet_cost', 10)
+    fish_index = data.get('fish_index', random.randint(0, len(FISH_TYPES) - 1))
+    
+    if fish_index >= len(FISH_TYPES):
+        fish_index = 0
+        
+    fish = FISH_TYPES[fish_index]
+    is_hit = random.random() < fish['catch_rate']
+    
+    reward = 0
+    if is_hit:
+        reward = bullet_cost * fish['multiplier']
+        
+    return jsonify({
+        'fish': fish['name'],
+        'multiplier': fish['multiplier'],
+        'bulletCost': bullet_cost,
+        'isHit': is_hit,
+        'reward': reward
+    })
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
